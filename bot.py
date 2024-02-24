@@ -1,6 +1,10 @@
 import discord, boto3, config
 
-client = discord.Client()
+intents = discord.Intents.all()
+intents.messages = True  # Enable message related intents
+
+client = discord.Client(intents=intents)
+
 ec2 = boto3.resource('ec2')
 instance = ec2.Instance(config.instance_id)
 
@@ -33,7 +37,7 @@ async def on_message(message):
         else:
             await message.channel.send('Error rebooting AWS Instance')
     elif message.content.lower() == "test":
-        await message.channel.send('Thanks, Jace. Helps alot.')
+        await message.channel.send("I'm alive, don't worry")
 
 def turnOffInstance():
     try:
@@ -59,4 +63,5 @@ def rebootInstance():
     except:
         return False
 
-client.run(config.discord_key)
+if __name__ == "__main__":
+    client.run(config.discord_key)
