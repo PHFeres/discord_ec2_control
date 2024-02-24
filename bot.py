@@ -61,7 +61,7 @@ async def on_message(message):
             await message.channel.send("Error starting AWS Instance")
     elif command == "state":
         if getInstanceState(instance=instance):
-            await message.channel.send("AWS Instance state is: " + getInstanceState())
+            await message.channel.send("AWS Instance state is: " + getInstanceState(instance=instance))
     elif command == "reboot":
         if rebootInstance(instance=instance):
             await message.channel.send("AWS Instance rebooting")
