@@ -23,6 +23,10 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
+    if message.author.name == "ec2_control":
+        # message from the robot itself, do nothing
+        return
+    
     my_message = message.content.lower()
 
     message_split = my_message.split()
