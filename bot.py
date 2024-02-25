@@ -7,10 +7,8 @@ client = discord.Client(intents=intents)
 
 ec2 = boto3.resource("ec2")
 
-ec2_ids = config.instance_ids
-
-instance_others = ec2.Instance(ec2_ids[0])
-instance_osmo = ec2.Instance(ec2_ids[1])
+my_instances = config.my_instances
+instances = {key: ec2.Instance(value) for (key, value) in my_instances.items()}
 
 
 @client.event
@@ -23,10 +21,13 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
-    if message.author.name == "ec2_control":
+    if (
+        message.author.name == "ec2_control" or 
+        message.channel.id != config.my_channel     # only monitors one channel
+    ):
         # message from the robot itself, do nothing
         return
-    
+
     my_message = message.content.lower()
 
     message_split = my_message.split()
@@ -39,14 +40,11 @@ async def on_message(message):
 
     machine, command = message_split
 
-    if machine == "others":
-        instance = instance_others
-    elif machine == "osmo":
-        instance = instance_osmo
-    else:
-        instance = None
+    instance = instances.get(machine)
+    if instance is None:
         return await message.channel.send(
-            "Invalid machine identifier. " "Valid identifiers are 'others' and 'osmo'"
+            f"Invalid machine identifier. "
+            f"Valid identifiers are {my_instances.keys()}"
         )
 
     if command == "stop":
