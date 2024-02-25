@@ -23,6 +23,8 @@ poetry install
 # Run the Python script
 python bot.py
 
+echo "bot.py finished"
+
 # Deactivate the virtual environment
 deactivate
 
