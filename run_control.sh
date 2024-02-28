@@ -14,6 +14,8 @@ sleep 1
 # Move to the crypto report directory
 cd "$CRYPTO_REPORT_DIR"
 
+git pull
+
 # Activate the virtual environment
 source "$CRYPTO_REPORT_DIR/.venv/bin/activate"
 
